@@ -89,4 +89,4 @@ Ver sección de deployment en este README (próximamente).
 
 ---
 
-**Construído como proyecto de aprendizaje en DevSpark.**
+**Construído como proyecto de aprendizaje en SoyHenry.**
