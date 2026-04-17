@@ -1,0 +1,92 @@
+# MiniBlog API
+
+API REST para gestión de usuarios (authors) y publicaciones (posts) en una plataforma de contenidos.
+
+## 📋 Descripción
+
+MiniBlog es una API sencilla pero robusta construida con Node.js/Express y PostgreSQL. Permite crear, leer, actualizar y eliminar usuarios y posts, con validaciones, tests unitarios y documentación OpenAPI.
+
+### Características
+- ✅ CRUD completo para usuarios y posts
+- ✅ Relaciones entre tablas (FKs)
+- ✅ Validaciones en las entradas
+- ✅ Tests unitarios con Jest y Supertest
+- ✅ Documentación OpenAPI/Swagger
+- ✅ Preparado para deploy en Railway
+
+## 🚀 Inicio rápido
+
+### Requisitos previos
+- Node.js 14+
+- PostgreSQL 12+
+- npm o yarn
+
+### Instalación local
+
+1. **Clonar el repositorio**
+```bash
+git clone <repo-url>
+cd miniblog-api
+```
+
+2. **Instalar dependencias**
+```bash
+npm install
+```
+
+3. **Configurar variables de entorno**
+```bash
+cp .env.example .env
+# Edita .env con tus credenciales PostgreSQL
+```
+
+4. **Crear base de datos y tablas**
+```bash
+npm run db:setup
+```
+
+5. **Ejecutar la aplicación**
+```bash
+npm run dev    # Desarrollo con nodemon
+# o
+npm start      # Producción
+```
+
+La API estará disponible en `http://localhost:3000`
+
+## 📚 API Endpoints
+
+### Authors (Usuarios)
+- `GET /authors` - Listar todos
+- `GET /authors/:id` - Detalle de un usuario
+- `POST /authors` - Crear usuario
+- `PUT /authors/:id` - Actualizar usuario
+- `DELETE /authors/:id` - Eliminar usuario
+
+### Posts (Publicaciones)
+- `GET /posts` - Listar todos
+- `GET /posts/:id` - Detalle de un post
+- `GET /posts/author/:authorId` - Posts de un autor
+- `POST /posts` - Crear post
+- `PUT /posts/:id` - Actualizar post
+- `DELETE /posts/:id` - Eliminar post
+
+## 🧪 Tests
+
+```bash
+npm test              # Ejecutar una vez
+npm run test:watch    # Modo watch
+npm run test:coverage # Con cobertura
+```
+
+## 📖 Documentación OpenAPI
+
+Ver archivo [openapi.yaml](./openapi.yaml) o acceder a Swagger UI.
+
+## 🚢 Deployment en Railway
+
+Ver sección de deployment en este README (próximamente).
+
+---
+
+**Construído como proyecto de aprendizaje en DevSpark.**
