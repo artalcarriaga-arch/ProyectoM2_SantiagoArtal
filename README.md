@@ -45,7 +45,12 @@ cp .env.example .env
 npm run db:setup
 ```
 
-5. **Ejecutar la aplicación**
+5. **Verificar conexión (opcional)**
+```bash
+node test-db.js
+```
+
+6. **Ejecutar la aplicación**
 ```bash
 npm run dev    # Desarrollo con nodemon
 # o
