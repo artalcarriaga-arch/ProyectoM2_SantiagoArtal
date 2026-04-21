@@ -79,10 +79,12 @@ La API estará disponible en `http://localhost:3000`
 ## 🧪 Tests
 
 ```bash
-npm test              # Ejecutar una vez
-npm run test:watch    # Modo watch
-npm run test:coverage # Con cobertura
+npm test              # Ejecutar tests
+npm run test:watch    # Modo watch (re-ejecuta al cambiar archivos)
+npm run test:coverage # Ver cobertura
 ```
+
+Ver documentación de tests en `Documentación IA/FASE5_TESTS.md`
 
 ## 📖 Documentación OpenAPI
 
