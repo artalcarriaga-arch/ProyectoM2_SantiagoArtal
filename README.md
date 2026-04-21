@@ -88,11 +88,17 @@ Ver documentación de tests en `Documentación IA/FASE5_TESTS.md`
 
 ## 📖 Documentación OpenAPI
 
-Ver archivo [openapi.yaml](./openapi.yaml) o acceder a Swagger UI.
+El archivo `openapi.yaml` contiene la especificación completa de la API.
+
+Puedes visualizarla en:
+- **Swagger Editor Online:** https://editor.swagger.io (copia el contenido de `openapi.yaml`)
+- **Localmente:** Instala `swagger-ui-express` y expón /api-docs (ver `Documentación IA/FASE6_OPENAPI.md`)
+
+Ver documentación en `Documentación IA/FASE6_OPENAPI.md`
 
 ## 🚢 Deployment en Railway
 
-Ver sección de deployment en este README (próximamente).
+Ver `Documentación IA/FASE7_RAILWAY.md` (próximamente).
 
 ---
 
