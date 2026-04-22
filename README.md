@@ -98,7 +98,12 @@ Ver documentación en `Documentación IA/FASE6_OPENAPI.md`
 
 ## 🚢 Deployment en Railway
 
-Ver `Documentación IA/FASE7_RAILWAY.md` (próximamente).
+Ver guía completa en `Documentación IA/FASE7_RAILWAY.md` que incluye:
+- Qué es Railway y por qué usarlo
+- Paso a paso: cuenta, proyecto, BD PostgreSQL, variables
+- Cómo crear tablas en BD remota
+- Deployment automático desde GitHub
+- Troubleshooting y logs
 
 ---
 
