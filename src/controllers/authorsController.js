@@ -2,84 +2,75 @@ const authorsService = require('../services/authorsService');
 
 const authorsController = {
 
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     try {
       const authors = await authorsService.getAll();
       res.status(200).json(authors);
     } catch (error) {
-      res.status(500).json({ error: 'Error al obtener autores' });
+      next(error);
     }
   },
 
-  async getById(req, res) {
+  async getById(req, res, next) {
     try {
       const { id } = req.params;
       const author = await authorsService.getById(id);
       
       if (!author) {
-        return res.status(404).json({ error: 'Autor no encontrado' });
+        const err = new Error('Autor no encontrado');
+        err.status = 404;
+        return next(err);
       }
       
       res.status(200).json(author);
     } catch (error) {
-      res.status(500).json({ error: 'Error al obtener autor' });
+      next(error);
     }
   },
 
-  async create(req, res) {
+  async create(req, res, next) {
     try {
       const { name, email, bio } = req.body;
-      
-      if (!name || !email) {
-        return res.status(400).json({ error: 'name y email son requeridos' });
-      }
-      
       const author = await authorsService.create(name, email, bio);
       res.status(201).json(author);
     } catch (error) {
-      if (error.code === '23505') {
-        return res.status(400).json({ error: 'Email ya existe' });
-      }
-      res.status(500).json({ error: 'Error al crear autor' });
+      next(error);
     }
   },
 
-  async update(req, res) {
+  async update(req, res, next) {
     try {
       const { id } = req.params;
       const { name, email, bio } = req.body;
       
-      if (!name || !email) {
-        return res.status(400).json({ error: 'name y email son requeridos' });
-      }
-      
       const author = await authorsService.update(id, name, email, bio);
       
       if (!author) {
-        return res.status(404).json({ error: 'Autor no encontrado' });
+        const err = new Error('Autor no encontrado');
+        err.status = 404;
+        return next(err);
       }
       
       res.status(200).json(author);
     } catch (error) {
-      if (error.code === '23505') {
-        return res.status(400).json({ error: 'Email ya existe' });
-      }
-      res.status(500).json({ error: 'Error al actualizar autor' });
+      next(error);
     }
   },
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     try {
       const { id } = req.params;
       const author = await authorsService.delete(id);
       
       if (!author) {
-        return res.status(404).json({ error: 'Autor no encontrado' });
+        const err = new Error('Autor no encontrado');
+        err.status = 404;
+        return next(err);
       }
       
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ error: 'Error al eliminar autor' });
+      next(error);
     }
   }
 

@@ -2,96 +2,92 @@ const postsService = require('../services/postsService');
 
 const postsController = {
 
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     try {
       const posts = await postsService.getAll();
       res.status(200).json(posts);
     } catch (error) {
-      res.status(500).json({ error: 'Error al obtener posts' });
+      next(error);
     }
   },
 
-  async getById(req, res) {
+  async getById(req, res, next) {
     try {
       const { id } = req.params;
       const post = await postsService.getById(id);
       
       if (!post) {
-        return res.status(404).json({ error: 'Post no encontrado' });
+        const err = new Error('Post no encontrado');
+        err.status = 404;
+        return next(err);
       }
       
       res.status(200).json(post);
     } catch (error) {
-      res.status(500).json({ error: 'Error al obtener post' });
+      next(error);
     }
   },
 
-  async getByAuthorId(req, res) {
+  async getByAuthorId(req, res, next) {
     try {
       const { authorId } = req.params;
       const posts = await postsService.getByAuthorId(authorId);
       
       if (posts.length === 0) {
-        return res.status(404).json({ error: 'No hay posts de este autor' });
+        const err = new Error('No hay posts de este autor');
+        err.status = 404;
+        return next(err);
       }
       
       res.status(200).json(posts);
     } catch (error) {
-      res.status(500).json({ error: 'Error al obtener posts del autor' });
+      next(error);
     }
   },
 
-  async create(req, res) {
+  async create(req, res, next) {
     try {
       const { author_id, title, content, published } = req.body;
-      
-      if (!author_id || !title || !content) {
-        return res.status(400).json({ error: 'author_id, title y content son requeridos' });
-      }
-      
       const post = await postsService.create(author_id, title, content, published || false);
       res.status(201).json(post);
     } catch (error) {
-      if (error.code === '23503') {
-        return res.status(400).json({ error: 'author_id no existe' });
-      }
-      res.status(500).json({ error: 'Error al crear post' });
+      next(error);
     }
   },
 
-  async update(req, res) {
+  async update(req, res, next) {
     try {
       const { id } = req.params;
       const { title, content, published } = req.body;
       
-      if (!title || !content) {
-        return res.status(400).json({ error: 'title y content son requeridos' });
-      }
-      
       const post = await postsService.update(id, title, content, published);
       
       if (!post) {
-        return res.status(404).json({ error: 'Post no encontrado' });
+        const err = new Error('Post no encontrado');
+        err.status = 404;
+        return next(err);
       }
       
       res.status(200).json(post);
     } catch (error) {
-      res.status(500).json({ error: 'Error al actualizar post' });
+      next(error);
     }
   },
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     try {
       const { id } = req.params;
       const post = await postsService.delete(id);
       
       if (!post) {
-        return res.status(404).json({ error: 'Post no encontrado' });
+        const err = new Error('Post no encontrado');
+        err.status = 404;
+        return next(err);
       }
       
       res.status(204).send();
     } catch (error) {
-      res.status(500).json({ error: 'Error al eliminar post' });
+      next(error);
     }
   }
 

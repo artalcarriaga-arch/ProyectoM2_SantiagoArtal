@@ -1,6 +1,8 @@
 const express = require('express');
 require('dotenv').config();
 
+const errorHandler = require('./middleware/errorHandler');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,10 +15,7 @@ app.get('/health', (req, res) => {
 app.use('/authors', require('./routes/authors'));
 app.use('/posts', require('./routes/posts'));
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Error interno del servidor' });
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
