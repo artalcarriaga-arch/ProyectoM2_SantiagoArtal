@@ -84,26 +84,151 @@ npm run test:watch    # Modo watch (re-ejecuta al cambiar archivos)
 npm run test:coverage # Ver cobertura
 ```
 
-Ver documentación de tests en `Documentación IA/FASE5_TESTS.md`
+### Cobertura de Tests
+
+El proyecto incluye **25+ casos de prueba** que cubren:
+
+- **Authors:** Crear, obtener, actualizar, eliminar usuarios
+  - Validación: name y email requeridos, email único
+  - Códigos HTTP: 200, 201, 400, 404
+  
+- **Posts:** CRUD completo de publicaciones
+  - Validación: author_id, title y content requeridos
+  - Foreign Key: Rechaza posts con author_id inexistente
+  - Cascading delete: Borrar author borra sus posts automáticamente
+  - Relaciones: Posts incluyen datos del author (name, email)
+
+- **Aislamiento:** Cada test limpia la BD antes de ejecutarse
+
+Usa **Jest** como framework y **Supertest** para simular requests HTTP.
 
 ## 📖 Documentación OpenAPI
 
-El archivo `openapi.yaml` contiene la especificación completa de la API.
+El archivo `openapi.yaml` contiene la **especificación completa de la API** en formato OpenAPI 3.0.
 
-Puedes visualizarla en:
-- **Swagger Editor Online:** https://editor.swagger.io (copia el contenido de `openapi.yaml`)
-- **Localmente:** Instala `swagger-ui-express` y expón /api-docs (ver `Documentación IA/FASE6_OPENAPI.md`)
+### Cómo visualizarla
 
-Ver documentación en `Documentación IA/FASE6_OPENAPI.md`
+**Opción 1: Swagger Editor Online (sin instalar nada)**
+- Ir a https://editor.swagger.io
+- Menu → File → Import file
+- Selecciona `openapi.yaml` de este proyecto
+- ¡Listo! Tendrás documentación interactiva
+
+**Opción 2: Localmente con Swagger UI**
+
+Si quieres servir la documentación desde tu app:
+
+```bash
+npm install swagger-ui-express yamljs
+```
+
+Luego en `src/index.js`, agregar antes de `app.listen()`:
+
+```javascript
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDoc = YAML.load('./openapi.yaml');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+```
+
+Accede a: `http://localhost:3000/api-docs`
+
+### Estructura del spec
+
+- **Paths:** Todos los 11 endpoints (6 authors + 6 posts + 1 health)
+- **Schemas:** Modelos de datos (Author, Post, PostWithAuthor, etc.)
+- **Responses:** HTTP codes documentados (200, 201, 204, 400, 404, 500)
+- **Parameters:** IDs, query params, request bodies
 
 ## 🚢 Deployment en Railway
 
-Ver guía completa en `Documentación IA/FASE7_RAILWAY.md` que incluye:
-- Qué es Railway y por qué usarlo
-- Paso a paso: cuenta, proyecto, BD PostgreSQL, variables
-- Cómo crear tablas en BD remota
-- Deployment automático desde GitHub
-- Troubleshooting y logs
+La aplicación está **lista para desplegar en Railway**, una plataforma moderna de hosting que automatiza todo el proceso.
+
+### Qué es Railway
+
+Railway aloja tu app Node.js + PostgreSQL en la nube. En lugar de configurar servidores, simplemente:
+1. Conectas tu GitHub
+2. Configuras variables de entorno
+3. Railway detecta cambios y redeploya automáticamente
+
+### Pasos para desplegar
+
+**1. Crear cuenta en Railway**
+- Ir a https://railway.app
+- Sign up with GitHub
+
+**2. Crear proyecto**
+- Click "Create Project"
+- "Deploy from GitHub repo"
+- Selecciona tu repositorio
+
+**3. Agregar PostgreSQL**
+- Click "+" en el proyecto
+- Selecciona "PostgreSQL"
+- Railway crea automáticamente la BD
+
+**4. Configurar variables de entorno**
+
+En Railway, en tu app (ProyectoM2_SantiagoArtal), pestaña **Variables**, agregar:
+
+```
+DATABASE_URL = postgresql://[user]:[password]@[host]:[port]/[db]
+NODE_ENV = production
+PORT = 5000
+```
+
+Railway proporciona `DATABASE_URL` automáticamente desde PostgreSQL.
+
+**5. Crear tablas en la BD remota**
+
+Una vez deployada, desde tu PC ejecuta:
+
+```bash
+export DATABASE_URL="tu_url_publica"
+node sql/setup-remote.js
+```
+
+Esto crea las tablas `authors` y `posts` en PostgreSQL remota.
+
+**6. Verificar que funciona**
+
+```bash
+curl https://tu-app.railway.app/health
+curl https://tu-app.railway.app/authors
+```
+
+### URLs
+
+```
+Local: http://localhost:3000
+Producción: https://proyectom2santiagoartal-production.up.railway.app
+```
+
+### Deploy automático
+
+Después del primer deploy, cada `git push` redeploya automáticamente:
+
+```bash
+git add .
+git commit -m "cambios"
+git push
+```
+
+Railway detecta el cambio y ejecuta `npm install && npm start` automáticamente.
+
+### Troubleshooting
+
+**API retorna 500 en GET /authors**
+- Verificar que `DATABASE_URL` está en Variables de Railway
+- Ver logs en Railway dashboard
+
+**"relation authors does not exist"**
+- Correr `node sql/setup-remote.js` para crear tablas
+
+**"Cannot find module"**
+- Verificar que `package.json` tiene todas las dependencias
+- Hacer `git push` nuevamente para retriggerear el deploy
 
 ---
 
